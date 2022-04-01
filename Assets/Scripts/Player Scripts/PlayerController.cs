@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
         transform.position = (new Vector3(movementInput.x, 0, 0) * speed * Time.deltaTime) + P;
 
         //checks if player is grounded, wanting to jump and if they are already jumping
-        if((isGrounded) && (isJumping == 1) && (GetComponent<Rigidbody2D>().velocity.magnitude == 0)){
+        if((isGrounded) && (isJumping == 1 || movementInput.y >= .9) && (GetComponent<Rigidbody2D>().velocity.magnitude == 0)){
             Jump();
         }
     }
