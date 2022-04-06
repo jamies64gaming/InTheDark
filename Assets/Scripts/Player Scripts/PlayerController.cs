@@ -20,9 +20,17 @@ public class PlayerController : MonoBehaviour
     private Vector3 pos;  
 
 
+
     //Grounded Vars
     bool isGrounded = true;
 
+
+    void Start(){
+        int PlayerID = GetComponent<PlayerDetails>().playerID;
+        Debug.Log(PlayerID);
+
+         Physics.IgnoreLayerCollision(0,5);
+    }
 
     // Update is called once per frame
     void Update()
@@ -32,6 +40,7 @@ public class PlayerController : MonoBehaviour
 
         //move function
         Move(pos);
+
     }
 
     //defines that the script is getting the Move controls from the new input system
@@ -66,4 +75,5 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = false;
     }
+
 }
