@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5814623463567258265}
   m_Layer: 3
   m_Name: Player1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,7 +57,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &1461262492488089099
 BoxCollider2D:
@@ -168,6 +168,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 7057dcfe-4e87-4dc8-893f-1113aaf363db
     m_ActionName: Gameplay/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1461262492488089101}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: onInteractPlayer
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e9a1e902-f241-4d7c-8a52-034f33e6e850
+    m_ActionName: Gameplay/InteractPlayer[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
@@ -188,6 +204,11 @@ MonoBehaviour:
   speed: 5
   jumpForce: 4
   isJumping: 0
+  isInteractPlayer: 0
+  mainCollider: {fileID: 1461262492488089099}
+  jumpTrigger: {fileID: 1461262492488089098}
+  headCollider: {fileID: 0}
+  headColliderCheck: {fileID: 0}
 --- !u!114 &5814623463567258265
 MonoBehaviour:
   m_ObjectHideFlags: 0

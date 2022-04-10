@@ -13,13 +13,21 @@ public class PlayerController : MonoBehaviour
     //defines value for jumping
     public float isJumping;
 
+    public float isInteractPlayer;
+
     //defines Vector2 for movement
     private Vector2 movementInput;
 
     //defines Vector2 for player postion
     private Vector3 pos;  
 
+    public BoxCollider2D mainCollider;
 
+    public BoxCollider2D jumpTrigger;
+
+    public BoxCollider2D headCollider;
+
+    public BoxCollider2D headColliderCheck;
 
     //Grounded Vars
     bool isGrounded = true;
@@ -46,7 +54,10 @@ public class PlayerController : MonoBehaviour
     //defines that the script is getting the Move controls from the new input system
     public void onMove(InputAction.CallbackContext context) => movementInput = context.ReadValue<Vector2>();
     //defines that the script is getting the Jump controls from the new input system
-    public void onJump(InputAction.CallbackContext context) => isJumping = context.ReadValue<float>();      
+    public void onJump(InputAction.CallbackContext context) => isJumping = context.ReadValue<float>(); 
+
+    public void onInteractPlayer(InputAction.CallbackContext context) => isInteractPlayer = context.ReadValue<float>(); 
+
 
     void Move(Vector3 P){
         //changes the players position horizontaly
@@ -76,4 +87,18 @@ public class PlayerController : MonoBehaviour
         isGrounded = false;
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player"){
+            Physics2D.IgnoreCollision(collision.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+
+        }
+    }
+    
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player" && isInteractPlayer == 1){
+            Debug.Log("hi");
+        }
+    }
 }
