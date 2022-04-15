@@ -7,8 +7,17 @@ public class PlayerController : MonoBehaviour
 {    
 
     //variables for player movement
-    public float speed = 1;
-    public float jumpForce = 7.5f;
+    public float speedP1 = 1;
+    public float jumpForceP1 = 7.5f;
+
+    public float speedP2 = 1;
+    public float jumpForceP2 = 7.5f;
+
+    private float speed;
+    private float jumpForce;
+
+    public float sizeP1 = 1;
+    public float sizeP2 = 1.5f;
 
     //defines value for jumping
     public float isJumping;
@@ -21,23 +30,51 @@ public class PlayerController : MonoBehaviour
     //defines Vector2 for player postion
     private Vector3 pos;  
 
+    //box colliders as variables
     public BoxCollider2D mainCollider;
 
     public BoxCollider2D jumpTrigger;
 
-    public BoxCollider2D headCollider;
+    public BoxCollider2D bodyTrigger;
 
     public BoxCollider2D headColliderCheck;
+
+
+    private bool canInteract = false;
+    Collider2D Collider2;
+    Transform player2;
+
+    private bool isPiggyBack = false;
+
+    private int PlayerID;
 
     //Grounded Vars
     bool isGrounded = true;
 
 
     void Start(){
-        int PlayerID = GetComponent<PlayerDetails>().playerID;
-        Debug.Log(PlayerID);
+        // get player ID
+        PlayerID = GetComponent<PlayerDetails>().playerID;
+        Debug.Log("player ID = " + (PlayerID));
 
-         Physics.IgnoreLayerCollision(0,5);
+        //gets the local scale of an object
+        Vector3 local = transform.localScale;
+
+        
+        //Change player stats based on ID
+        if(PlayerID == 1){
+            speed = speedP1;
+            jumpForce = jumpForceP1;
+            transform.localScale = new Vector3(1,sizeP1,1);
+        }
+        else{
+            speed = speedP2;
+            jumpForce = jumpForceP2;  
+            transform.localScale = new Vector3(1,sizeP2,1);   
+        }
+
+        //ignore collisions so players cant collide
+        Physics.IgnoreLayerCollision(0,5);
     }
 
     // Update is called once per frame
@@ -47,7 +84,13 @@ public class PlayerController : MonoBehaviour
         pos = transform.position;
 
         //move function
-        Move(pos);
+        if(!isPiggyBack){
+            Move(pos);
+        }
+
+        if(PlayerID == 1 && !isPiggyBack){
+            PlayerPiggyBack(pos);
+        }
 
     }
 
@@ -55,7 +98,7 @@ public class PlayerController : MonoBehaviour
     public void onMove(InputAction.CallbackContext context) => movementInput = context.ReadValue<Vector2>();
     //defines that the script is getting the Jump controls from the new input system
     public void onJump(InputAction.CallbackContext context) => isJumping = context.ReadValue<float>(); 
-
+    //defines that the script is getting the InteractPlayer from the new input system
     public void onInteractPlayer(InputAction.CallbackContext context) => isInteractPlayer = context.ReadValue<float>(); 
 
 
@@ -91,14 +134,22 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player"){
             Physics2D.IgnoreCollision(collision.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-
+            canInteract = true;
+            Collider2 = collision.gameObject.GetComponent<Collider2D>();
+            player2 = collision.transform;
         }
     }
     
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Player" && isInteractPlayer == 1){
-            Debug.Log("hi");
+    private void PlayerPiggyBack(Vector3 p){
+        if(canInteract){
+            Debug.Log(isInteractPlayer);
+            if ((GetComponent<Collider2D>().bounds.Intersects(Collider2.bounds) == true) && (isInteractPlayer == 1))
+            {
+                Debug.Log("Bounds intersecting");
+                transform.SetParent(player2);
+                isPiggyBack = true;
+                transform.position = (new Vector3(0,1.5f,0)) + p;
+            }
         }
     }
 }
