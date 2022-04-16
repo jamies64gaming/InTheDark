@@ -32,25 +32,35 @@ public class PlayerController : MonoBehaviour
 
     //box colliders as variables
     public BoxCollider2D mainCollider;
-
     public BoxCollider2D jumpTrigger;
-
     public BoxCollider2D bodyTrigger;
-
     public BoxCollider2D headColliderCheck;
 
-
+    //set the caninteract variable to false (this is for PiggyBacks)
     private bool canInteract = false;
-    Collider2D Collider2;
-    Transform player2;
 
+    //get collider variable ready for piggyback
+    Collider2D otherCollider;
+
+    //get position variable ready for piggyback
+    Transform otherPlayer;
+
+    //player is not giving piggy back right now
     private bool isPiggyBack = false;
 
+    //set cooldown to avoid accidental double presses
+    private float piggyBackCooldown = .5f; 
+
+    //player id variable
     private int PlayerID;
 
     //Grounded Vars
     bool isGrounded = true;
 
+    //get variable name for sprite of player
+    public GameObject sprite;
+
+    private followPlayers variables;
 
     void Start(){
         // get player ID
@@ -60,21 +70,22 @@ public class PlayerController : MonoBehaviour
         //gets the local scale of an object
         Vector3 local = transform.localScale;
 
-        
+        variables = GameObject.Find("Main Camera").GetComponent<followPlayers>();
         //Change player stats based on ID
         if(PlayerID == 1){
             speed = speedP1;
             jumpForce = jumpForceP1;
             transform.localScale = new Vector3(1,sizeP1,1);
+            sprite.GetComponent<SpriteRenderer>().color = Color.red;
+            variables.player1 = GetComponent<Transform>();
         }
         else{
             speed = speedP2;
             jumpForce = jumpForceP2;  
             transform.localScale = new Vector3(1,sizeP2,1);   
+            sprite.GetComponent<SpriteRenderer>().color = Color.blue;
+            variables.player2 = GetComponent<Transform>(); 
         }
-
-        //ignore collisions so players cant collide
-        Physics.IgnoreLayerCollision(0,5);
     }
 
     // Update is called once per frame
@@ -88,8 +99,20 @@ public class PlayerController : MonoBehaviour
             Move(pos);
         }
 
+        //if player one (small player) want to piggyback
         if(PlayerID == 1 && !isPiggyBack){
-            PlayerPiggyBack(pos);
+            PlayerPiggyBack();
+        }
+
+        //check if player wants to get off piggy back
+        else if(PlayerID == 1 && isPiggyBack){
+            //activate cooldown
+            if (piggyBackCooldown > 0){
+                piggyBackCooldown -= Time.deltaTime;
+            }
+            else{
+                CancelPlayerPiggyBack();
+            }
         }
 
     }
@@ -102,7 +125,7 @@ public class PlayerController : MonoBehaviour
     public void onInteractPlayer(InputAction.CallbackContext context) => isInteractPlayer = context.ReadValue<float>(); 
 
 
-    void Move(Vector3 P){
+    private void Move(Vector3 P){
         //changes the players position horizontaly
         transform.position = (new Vector3(movementInput.x, 0, 0) * speed * Time.deltaTime) + P;
 
@@ -112,7 +135,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Jump(){
+    private void Jump(){
         //push the rigid body with a force
         GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         //make sure the player is not grounded, prevents double jump
@@ -120,36 +143,64 @@ public class PlayerController : MonoBehaviour
     }
 
     //checking if player is touching the ground
-    void OnTriggerStay2D()
+    private void OnTriggerStay2D()
     {
         isGrounded = true;
     }
 
-    void OnTriggerExit2D()
+    private void OnTriggerExit2D()
     {
         isGrounded = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //check if players collide
         if (collision.gameObject.tag == "Player"){
+            //ignore colisions of players
             Physics2D.IgnoreCollision(collision.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+
+            //players have interacted
             canInteract = true;
-            Collider2 = collision.gameObject.GetComponent<Collider2D>();
-            player2 = collision.transform;
+
+            //set variables for other players
+            otherCollider = collision.gameObject.GetComponent<Collider2D>();
+            otherPlayer = collision.transform;
         }
     }
     
-    private void PlayerPiggyBack(Vector3 p){
+    private void PlayerPiggyBack(){
         if(canInteract){
-            Debug.Log(isInteractPlayer);
-            if ((GetComponent<Collider2D>().bounds.Intersects(Collider2.bounds) == true) && (isInteractPlayer == 1))
+            //check if players are within eachothers bounds, and check if player wants to interact
+            if ((GetComponent<Collider2D>().bounds.Intersects(otherCollider.bounds) == true) && (isInteractPlayer == 1))
             {
-                Debug.Log("Bounds intersecting");
-                transform.SetParent(player2);
+                //Debug.Log("Bounds intersecting");
+                //set other player as parent
+                transform.SetParent(otherPlayer);
+                //set piggyback to true
                 isPiggyBack = true;
-                transform.position = (new Vector3(0,1.5f,0)) + p;
+                //mave player to above the other player
+                transform.position = (new Vector3(0,.7f,0)) + otherPlayer.position;
+                //get rid of rigid body so player doesnt fall
+                Destroy(GetComponent<Rigidbody2D>());
             }
         }
+    }
+
+    private void CancelPlayerPiggyBack(){
+        //check if player wants to get off player
+        if(canInteract && (isInteractPlayer == 1)){
+            //get rid of parent of player
+            transform.SetParent(null);
+            //offset the players postion to be slightly off
+            transform.position = (new Vector3(1,.75f,0)) + otherPlayer.position;
+            //add rigidbody back
+            gameObject.AddComponent<Rigidbody2D>();
+            //set piggyback to false
+            isPiggyBack = false;
+            //reset cooldown timer
+            piggyBackCooldown = .5f;
+        }
+
     }
 }

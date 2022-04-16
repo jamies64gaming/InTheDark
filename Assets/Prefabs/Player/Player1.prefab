@@ -240,6 +240,7 @@ MonoBehaviour:
   jumpTrigger: {fileID: 1461262492488089098}
   bodyTrigger: {fileID: 1306307430147548660}
   headColliderCheck: {fileID: 0}
+  sprite: {fileID: 1461262493374862736}
 --- !u!114 &5814623463567258265
 MonoBehaviour:
   m_ObjectHideFlags: 0
