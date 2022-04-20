@@ -7,22 +7,29 @@ public class PlayerController : MonoBehaviour
 {    
 
     //variables for player movement
-    public float speedP1 = 1;
-    public float jumpForceP1 = 7.5f;
+    public float speedP1;
+    public float jumpForceP1;
 
-    public float speedP2 = 1;
-    public float jumpForceP2 = 7.5f;
+    public float speedP2;
+    public float jumpForceP2;
 
     private float speed;
     private float jumpForce;
 
+    public float massP1;
+    public float massP2;
+
     public float sizeP1 = 1;
     public float sizeP2 = 1.5f;
+
+    //defines rigidbody variable
+    public Rigidbody2D rb;
 
     //defines value for jumping
     public float isJumping;
 
     public float isInteractPlayer;
+
 
     //defines Vector2 for movement
     private Vector2 movementInput;
@@ -70,6 +77,9 @@ public class PlayerController : MonoBehaviour
         //gets the local scale of an object
         Vector3 local = transform.localScale;
 
+        //get rigidbody
+        rb = GetComponent<Rigidbody2D>();
+
         variables = GameObject.Find("Main Camera").GetComponent<followPlayers>();
         //Change player stats based on ID
         if(PlayerID == 1){
@@ -78,13 +88,15 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(1,sizeP1,1);
             sprite.GetComponent<SpriteRenderer>().color = Color.red;
             variables.player1 = GetComponent<Transform>();
+            rb.mass = massP1;
         }
         else{
             speed = speedP2;
             jumpForce = jumpForceP2;  
             transform.localScale = new Vector3(1,sizeP2,1);   
             sprite.GetComponent<SpriteRenderer>().color = Color.blue;
-            variables.player2 = GetComponent<Transform>(); 
+            variables.player2 = GetComponent<Transform>();
+            rb.mass = massP2;
         }
     }
 
@@ -131,13 +143,13 @@ public class PlayerController : MonoBehaviour
 
         //checks if player is grounded, wanting to jump and if they are already jumping
         if((isGrounded) && (isJumping == 1 || movementInput.y >= .9) && (GetComponent<Rigidbody2D>().velocity.magnitude == 0)){
-            Jump();
+            Jump(1f);
         }
     }
 
-    private void Jump(){
+    private void Jump(float intesity){
         //push the rigid body with a force
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+        GetComponent<Rigidbody2D>().AddForce(new Vector2(0, intesity * jumpForce), ForceMode2D.Impulse);
         //make sure the player is not grounded, prevents double jump
         isGrounded = false;
     }
@@ -192,15 +204,18 @@ public class PlayerController : MonoBehaviour
         if(canInteract && (isInteractPlayer == 1)){
             //get rid of parent of player
             transform.SetParent(null);
-            //offset the players postion to be slightly off
-            transform.position = (new Vector3(1,.75f,0)) + otherPlayer.position;
             //add rigidbody back
             gameObject.AddComponent<Rigidbody2D>();
+            //gets the rigid body reference
+            rb = GetComponent<Rigidbody2D>();
+            //freezes the rotation of the player
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             //set piggyback to false
             isPiggyBack = false;
             //reset cooldown timer
             piggyBackCooldown = .5f;
+            //get player to jump off at slighlty higher than normal
+            Jump(1.2f);
         }
-
     }
 }

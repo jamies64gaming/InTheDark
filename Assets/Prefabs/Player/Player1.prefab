@@ -231,9 +231,12 @@ MonoBehaviour:
   speedP1: 4
   jumpForceP1: 3
   speedP2: 3
-  jumpForceP2: 3
+  jumpForceP2: 12
+  massP1: 1
+  massP2: 3
   sizeP1: 1
   sizeP2: 1.5
+  rb: {fileID: 0}
   isJumping: 0
   isInteractPlayer: 0
   mainCollider: {fileID: 1461262492488089099}
