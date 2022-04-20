@@ -62,12 +62,19 @@ public class PlayerController : MonoBehaviour
     private int PlayerID;
 
     //Grounded Vars
-    bool isGrounded = true;
+    private bool isGrounded = true;
 
     //get variable name for sprite of player
     public GameObject sprite;
 
     private followPlayers variables;
+
+    //sprites for players
+    public Sprite spriteP1;
+    public Sprite spriteP2;
+
+    private bool goingRight;
+    public GameObject childPlayer;
 
     void Start(){
         // get player ID
@@ -86,17 +93,17 @@ public class PlayerController : MonoBehaviour
             speed = speedP1;
             jumpForce = jumpForceP1;
             transform.localScale = new Vector3(1,sizeP1,1);
-            sprite.GetComponent<SpriteRenderer>().color = Color.red;
             variables.player1 = GetComponent<Transform>();
             rb.mass = massP1;
+            sprite.GetComponent<SpriteRenderer>().sprite = spriteP1;
         }
         else{
             speed = speedP2;
             jumpForce = jumpForceP2;  
             transform.localScale = new Vector3(1,sizeP2,1);   
-            sprite.GetComponent<SpriteRenderer>().color = Color.blue;
             variables.player2 = GetComponent<Transform>();
             rb.mass = massP2;
+            sprite.GetComponent<SpriteRenderer>().sprite = spriteP2;
         }
     }
 
@@ -140,11 +147,14 @@ public class PlayerController : MonoBehaviour
     private void Move(Vector3 P){
         //changes the players position horizontaly
         transform.position = (new Vector3(movementInput.x, 0, 0) * speed * Time.deltaTime) + P;
+        //flip player
+        FlipSprite();
 
         //checks if player is grounded, wanting to jump and if they are already jumping
         if((isGrounded) && (isJumping == 1 || movementInput.y >= .9) && (GetComponent<Rigidbody2D>().velocity.magnitude == 0)){
             Jump(1f);
         }
+
     }
 
     private void Jump(float intesity){
@@ -153,6 +163,37 @@ public class PlayerController : MonoBehaviour
         //make sure the player is not grounded, prevents double jump
         isGrounded = false;
     }
+
+//WORK IN PROGESS #######################################################################################################################
+    private void FlipSprite(){
+        //flip player postion based on the direction they are moving
+        if (movementInput.x > 0.01 && !goingRight){
+            sprite.GetComponent<SpriteRenderer>().flipX = false;
+            goingRight = true;
+
+            //Debug.Log(transform.childCount);
+            if(transform.childCount >= 2){
+                Debug.Log(childPlayer);
+                childPlayer = transform.GetChild(transform.childCount -1).gameObject;
+                Debug.Log(childPlayer);
+                childPlayer = transform.GetChild(childPlayer.transform.childCount-1).gameObject;
+                Debug.Log(childPlayer);
+                childPlayer.GetComponent<SpriteRenderer>().flipX = false;
+            }
+        }
+        else if(movementInput.x < 0.01 && goingRight){
+            sprite.GetComponent<SpriteRenderer>().flipX = true;
+            goingRight = false;
+
+            //Debug.Log(transform.childCount);
+            if(transform.childCount >= 2){
+                childPlayer = transform.GetChild(transform.childCount -1).gameObject;
+                childPlayer = transform.GetChild(childPlayer.transform.childCount -1 ).gameObject;
+                childPlayer.GetComponent<SpriteRenderer>().flipX = true;
+            }
+        }
+    }
+//WORK IN PROGESS #######################################################################################################################
 
     //checking if player is touching the ground
     private void OnTriggerStay2D()
@@ -192,7 +233,7 @@ public class PlayerController : MonoBehaviour
                 //set piggyback to true
                 isPiggyBack = true;
                 //mave player to above the other player
-                transform.position = (new Vector3(0,.7f,0)) + otherPlayer.position;
+                transform.position = (new Vector3(0,sizeP2/2 - .1f,0)) + otherPlayer.position;
                 //get rid of rigid body so player doesnt fall
                 Destroy(GetComponent<Rigidbody2D>());
             }
@@ -201,7 +242,7 @@ public class PlayerController : MonoBehaviour
 
     private void CancelPlayerPiggyBack(){
         //check if player wants to get off player
-        if(canInteract && (isInteractPlayer == 1)){
+        if(canInteract && (isInteractPlayer == 1) || (isJumping == 1 || movementInput.y >= .9)){
             //get rid of parent of player
             transform.SetParent(null);
             //add rigidbody back
