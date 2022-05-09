@@ -5,11 +5,8 @@ using UnityEngine;
 public class EndLevelTrigger : MonoBehaviour
 {
     public int playerId;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public bool PlayerReady = false;
+
 
     // Update is called once per frame
     void Update()
@@ -22,6 +19,16 @@ public class EndLevelTrigger : MonoBehaviour
         if(collider.gameObject.tag == "Player"){
             if(collider.gameObject.GetComponent<PlayerDetails>().playerID == playerId){
                 Debug.Log("player " + playerId + " is ready");
+                PlayerReady = true;
+            }
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collider)
+    {
+        if(collider.gameObject.tag == "Player"){
+            if(collider.gameObject.GetComponent<PlayerDetails>().playerID == playerId){
+                Debug.Log("player " + playerId + " is not ready");
+                PlayerReady = false;
             }
         }
     }
