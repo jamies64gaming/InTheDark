@@ -73,7 +73,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.000000014901161, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -84,7 +84,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.70890665, y: 1}
   m_EdgeRadius: 0
 --- !u!61 &1461262492488089098
 BoxCollider2D:
@@ -125,7 +125,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0025990605, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -136,7 +136,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.7, y: 0.5}
+  m_Size: {x: 0.70519805, y: 0.5}
   m_EdgeRadius: 0
 --- !u!114 &5592500554544417510
 MonoBehaviour:
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e95ca99c36ff59f4d85a1888567e1bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedP1: 2.5
+  speedP1: 2
   jumpForceP1: 5
   speedP2: 3
   jumpForceP2: 20
@@ -247,6 +247,8 @@ MonoBehaviour:
   spriteP1: {fileID: 21300000, guid: a205d71247743754b81b4348dfc153d8, type: 3}
   spriteP2: {fileID: 21300000, guid: 8576924c3acdfc8458a7118ba4f06dab, type: 3}
   childPlayer: {fileID: 0}
+  girl: {fileID: 6550297968405653311, guid: fe5a86b4667819f4c9d18735298fb956, type: 3}
+  boy: {fileID: 9011261733456175828, guid: 479608f653b08744685fc3dc260d7e3d, type: 3}
 --- !u!114 &5814623463567258265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,7 +279,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1461262493374862738
 Transform:
   m_ObjectHideFlags: 0

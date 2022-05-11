@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {    
@@ -76,6 +77,11 @@ public class PlayerController : MonoBehaviour
     private bool goingRight;
     public GameObject childPlayer;
 
+    public GameObject girl;
+    public GameObject boy;
+
+    private GameObject playerSprite;
+
     void Start(){
         // get player ID
         PlayerID = GetComponent<PlayerDetails>().playerID;
@@ -96,6 +102,8 @@ public class PlayerController : MonoBehaviour
             variables.player1 = GetComponent<Transform>();
             rb.mass = massP1;
             sprite.GetComponent<SpriteRenderer>().sprite = spriteP1;
+            playerSprite = Instantiate(girl,transform.position + new Vector3(.5f,.25f,0), transform.rotation);
+            playerSprite.transform.parent = transform;
         }
         else{
             speed = speedP2;
@@ -104,6 +112,8 @@ public class PlayerController : MonoBehaviour
             variables.player2 = GetComponent<Transform>();
             rb.mass = massP2;
             sprite.GetComponent<SpriteRenderer>().sprite = spriteP2;
+            playerSprite = Instantiate(boy,transform.position, transform.rotation);
+            playerSprite.transform.parent = transform;
         }
     }
 
@@ -132,6 +142,10 @@ public class PlayerController : MonoBehaviour
             else{
                 CancelPlayerPiggyBack();
             }
+        }
+
+        if(pos.y < -10){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
     }
@@ -236,6 +250,8 @@ public class PlayerController : MonoBehaviour
                 transform.position = (new Vector3(0,sizeP2/2 - .1f,0)) + otherPlayer.position;
                 //get rid of rigid body so player doesnt fall
                 Destroy(GetComponent<Rigidbody2D>());
+                otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass = otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass*2;
+                otherPlayer.gameObject.GetComponent<PlayerController>().speed  =  otherPlayer.gameObject.GetComponent<PlayerController>().speed / 2f;
             }
         }
     }
@@ -257,6 +273,10 @@ public class PlayerController : MonoBehaviour
             piggyBackCooldown = .5f;
             //get player to jump off at slighlty higher than normal
             Jump(1.2f);
+            otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass = otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass/2;
+            otherPlayer.gameObject.GetComponent<PlayerController>().speed  =  otherPlayer.gameObject.GetComponent<PlayerController>().speed * 2f;
+            
+
         }
     }
 }
