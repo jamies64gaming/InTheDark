@@ -93,8 +93,9 @@ public class PlayerController : MonoBehaviour
     public bool animateIdle = false;
 
 
-    void Start()
-    {
+
+    void Start(){
+
         // get player ID
         PlayerID = GetComponent<PlayerDetails>().playerID;
         //Debug.Log("player ID = " + (PlayerID));
@@ -115,7 +116,9 @@ public class PlayerController : MonoBehaviour
             variables.player1 = GetComponent<Transform>();
             rb.mass = massP1;
             sprite.GetComponent<SpriteRenderer>().sprite = spriteP1;
+
             playerSprite = Instantiate(girl, transform.position + new Vector3(.5f, .25f, 0), transform.rotation);
+
             playerSprite.transform.parent = transform;
         }
         else
@@ -127,6 +130,7 @@ public class PlayerController : MonoBehaviour
             rb.mass = massP2;
             sprite.GetComponent<SpriteRenderer>().sprite = spriteP2;
             playerSprite = Instantiate(boy, transform.position, transform.rotation);
+
             playerSprite.transform.parent = transform;
         }
     }
@@ -178,10 +182,9 @@ public class PlayerController : MonoBehaviour
     public void onInteractPlayer(InputAction.CallbackContext context) => isInteractPlayer = context.ReadValue<float>();
 
 
-    private void Move(Vector3 P)
-    {
-        if (PlayerID == 1 && isPiggyBack)
-        {
+    private void Move(Vector3 P){
+        if(PlayerID == 1 && isPiggyBack){
+
             return;
         }
         //changes the players position horizontaly
@@ -205,95 +208,74 @@ public class PlayerController : MonoBehaviour
         isGrounded = false;
     }
 
-    private void AnimationVariables()
-    {
-        if (movementInput.x != 0 && (GetComponent<Rigidbody2D>().velocity.magnitude == 0))
-        {
-            if (isPiggyBack)
-            {
+    private void AnimationVariables(){
+        if (movementInput.x != 0 && (GetComponent<Rigidbody2D>().velocity.magnitude == 0)){
+            if(isPiggyBack){
                 animatePiggybackWalking = true;
+            }else{
+            animateWalking = true;
+            animatePiggybackWalking = false;
             }
-            else
-            {
-                animateWalking = true;
-                animatePiggybackWalking = false;
-            }
-        }
-        else
-        {
+        }else{
+
             animateWalking = false;
             animatePiggybackWalking = false;
         }
 
-        if (GetComponent<Rigidbody2D>().velocity.y > 0)
-        {
-            if (isPiggyBack)
-            {
+
+        if (GetComponent<Rigidbody2D>().velocity.y > 0){
+            if(isPiggyBack){
                 animatePiggybackJumping = true;
                 animatePiggybackFalling = false;
-            }
-            else
-            {
-                animateJumping = true;
-                animateFalling = false;
-                animatePiggybackJumping = false;
-                animatePiggybackFalling = false;
-            }
+            }else{
+            animateJumping = true;
+            animateFalling = false;
+            animatePiggybackJumping = false;
+            animatePiggybackFalling = false;
         }
-        else if (GetComponent<Rigidbody2D>().velocity.y < 0)
-        {
-            if (isPiggyBack)
-            {
+        }
+        else if (GetComponent<Rigidbody2D>().velocity.y < 0){
+            if(isPiggyBack){
                 animatePiggybackFalling = true;
                 animatePiggybackJumping = false;
-            }
-            else
-            {
-                animateJumping = false;
-                animateFalling = true;
-                animatePiggybackFalling = false;
-                animatePiggybackJumping = false;
-            }
+            }else{
+            animateJumping = false;
+            animateFalling = true;
+            animatePiggybackFalling = false;
+            animatePiggybackJumping = false;
         }
-        else
-        {
-            if (isPiggyBack)
-            {
+        }
+        else{
+            if(isPiggyBack){
                 animatePiggybackJumping = false;
                 animatePiggybackFalling = false;
-            }
-            else
-            {
-                animateFalling = false;
-                animateJumping = false;
-                animatePiggybackJumping = false;
-                animatePiggybackFalling = false;
-            }
+            }else{
+            animateFalling = false;
+            animateJumping = false;
+            animatePiggybackJumping = false;
+            animatePiggybackFalling = false;
+            }   
         }
 
-        if (!animateJumping && !animateFalling && !animateWalking && !isPiggyBack)
-        {
+        if(!animateJumping && !animateFalling && !animateWalking && !isPiggyBack){
             animateIdle = true;
         }
-        else
-        {
+        else{
             animateIdle = false;
         }
-        if (!animatePiggybackJumping && !animatePiggybackFalling && !animatePiggybackWalking && isPiggyBack)
-        {
+        if(!animatePiggybackJumping && !animatePiggybackFalling && !animatePiggybackWalking && isPiggyBack){
             animatePiggybackIdle = true;
         }
-        else
-        {
+        else{
             animatePiggybackIdle = false;
         }
-
+        
         //Debug.Log(GetComponent<Rigidbody2D>().velocity.y);
     }
 
-    //WORK IN PROGESS #######################################################################################################################
-    private void FlipSprite()
-    {
+//WORK IN PROGESS #######################################################################################################################
+    private void FlipSprite(){
+
         //flip player postion based on the direction they are moving
         if (movementInput.x > 0.01 && !goingRight)
         {
@@ -301,12 +283,13 @@ public class PlayerController : MonoBehaviour
             goingRight = true;
 
             ////Debug.Log(transform.childCount);
-            if (transform.childCount >= 2)
-            {
+
+            if(transform.childCount >= 2){
                 //Debug.Log(childPlayer);
-                childPlayer = transform.GetChild(transform.childCount - 1).gameObject;
+                childPlayer = transform.GetChild(transform.childCount -1).gameObject;
                 //Debug.Log(childPlayer);
-                childPlayer = transform.GetChild(childPlayer.transform.childCount - 1).gameObject;
+                childPlayer = transform.GetChild(childPlayer.transform.childCount-1).gameObject;
+
                 //Debug.Log(childPlayer);
                 childPlayer.GetComponent<SpriteRenderer>().flipX = false;
             }
@@ -317,10 +300,11 @@ public class PlayerController : MonoBehaviour
             goingRight = false;
 
             ////Debug.Log(transform.childCount);
-            if (transform.childCount >= 2)
-            {
-                childPlayer = transform.GetChild(transform.childCount - 1).gameObject;
-                childPlayer = transform.GetChild(childPlayer.transform.childCount - 1).gameObject;
+
+            if(transform.childCount >= 2){
+                childPlayer = transform.GetChild(transform.childCount -1).gameObject;
+                childPlayer = transform.GetChild(childPlayer.transform.childCount -1 ).gameObject;
+
                 childPlayer.GetComponent<SpriteRenderer>().flipX = true;
             }
         }
@@ -371,9 +355,11 @@ public class PlayerController : MonoBehaviour
                 transform.position = (new Vector3(0, sizeP2 / 2 - .1f, 0)) + otherPlayer.position;
                 //get rid of rigid body so player doesnt fall
                 Destroy(GetComponent<Rigidbody2D>());
-                otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass = otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass * 2;
-                otherPlayer.gameObject.GetComponent<PlayerController>().speed = otherPlayer.gameObject.GetComponent<PlayerController>().speed / 2f;
+
+                otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass = otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass*2;
+                otherPlayer.gameObject.GetComponent<PlayerController>().speed  =  otherPlayer.gameObject.GetComponent<PlayerController>().speed / 2f;
                 otherPlayer.gameObject.GetComponent<PlayerController>().isPiggyBack = true;
+
             }
         }
     }
@@ -397,9 +383,11 @@ public class PlayerController : MonoBehaviour
             piggyBackCooldown = .5f;
             //get player to jump off at slighlty higher than normal
             Jump(1.2f);
-            otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass = otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass / 2;
-            otherPlayer.gameObject.GetComponent<PlayerController>().speed = otherPlayer.gameObject.GetComponent<PlayerController>().speed * 2f;
+
+            otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass = otherPlayer.gameObject.GetComponent<Rigidbody2D>().mass/2;
+            otherPlayer.gameObject.GetComponent<PlayerController>().speed  =  otherPlayer.gameObject.GetComponent<PlayerController>().speed * 2f;
             otherPlayer.gameObject.GetComponent<PlayerController>().isPiggyBack = false;
+            
 
 
         }
