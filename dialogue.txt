@@ -1,0 +1,51 @@
+
+Intro sequence:
+Sunlight. An abstract concept to most people nowadays. Normality became living underground, though the reason died along with a generation. The surface is only known to most now through fairytales, a land of lush greens and towering buildings. The surface sounds like the perfect place to find seeds to help with the family farm, you're running low on crops afterall..
+
+
+
+dialogue script: in order of appearing ingame
+
+on screen prompt: (press e or a to spawn)
+on screen prompt: arrow keys or d-pad for movement
+
+
+spirit dialogue 1:now who do we have here?
+Journeying to the top i'd wager. Well you've another to rely on, thats good. The path to the top is not one to be ventured alone, I would know.
+
+
+player dialogue: Get on my shoulders, I'll help you up (press f or Y to be piggybacked)
+player dialogue: Jumps too high to make 
+player dialogue: (dont use minecart dialogue)
+player dialogue:(move infront of 4 wide jump) I cant make this jump with you on my back, wait here. OTHER PLAYER: okay, be quick
+player dialogue: watch you step  other player dialogue: I will
+player dialogue: out of reach
+player dialogue: I cant squeeze through, you got this.
+other player dialogue: the way backs gone. player: Hold on
+other player dialogue: Look! its moving.
+player dialogue: Whats with this place, its unatural. other player dialogue: I dont like it
+player dialogue: We best watch our steps, I'll carry you down, If you're scared.
+player dialogue: We've gotta be getting close to the surface.
+other player dialogue: Look! the blue mans back. player: huh?
+
+spirit dialogue 2: now who do we have here?
+Trying to get to surface i see.
+Well you're nearing it alright.
+but careful now, or you'll join me.
+
+
+player dialogue: these dont look stable, better be quick
+
+Spirit dialogue 3:
+NO NOT NOW! IM SO CLOSE I CAN SEE IT! MOVE DAMNIT! MOVE!
+MOVE!
+
+player dialogue: I can see light. other player: So bright
+
+
+outside
+player is... this all thats left?
+
+
+
+
